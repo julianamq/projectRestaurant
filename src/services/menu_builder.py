@@ -25,6 +25,7 @@ class MenuBuilder:
         self.inventory.consume_recipe(curr_dish.recipe)
 
     # Req 4
+
     def get_main_menu(self, restriction=None) -> pd.DataFrame:
         return pd.DataFrame(
             [
@@ -35,6 +36,10 @@ class MenuBuilder:
                     "restrictions": dish.get_restrictions(),
                 }
                 for dish in self.menu_data.dishes
-                if restriction not in dish.get_restrictions()
+                if (restriction not in dish.get_restrictions())
+                and all(
+                    ingredient in self.inventory.inventory
+                    for ingredient in dish.get_ingredients()
+                )
             ]
         )
